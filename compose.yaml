@@ -1,0 +1,81 @@
+services:
+  app:
+    build:
+      context: fpm
+      dockerfile: Dockerfile.fpm
+    volumes:
+      - ./fpm:/var/www/html
+    ports:
+      - 8400:80
+    networks:
+      - experiment
+
+  mysql:
+    image: mysql:8.0.26
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+    ports:
+      - "3306:3306"
+    networks:
+      - experiment
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysqld-exporter
+    restart: always
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: "mysql"
+    command:
+      - "--mysqld.address=mysql:3306"
+      - "--mysqld.username=root"
+    depends_on:
+      - mysql
+    ports:
+      - "9104:9104"
+    networks:
+      - experiment
+
+  fpm-exporter:
+    image: hipages/php-fpm_exporter
+    container_name: fpm-exporter
+    restart: always
+    environment:
+      PHP_FPM_SCRAPE_URI: "tcp://app:9000/status"
+    ports:
+      - "9253:9253"
+    networks:
+      - experiment
+    depends_on:
+      - app
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    networks:
+      - experiment
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - experiment
+    depends_on:
+      - prometheus
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+
+networks:
+  experiment:
