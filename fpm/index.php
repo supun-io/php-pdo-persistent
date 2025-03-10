@@ -1,5 +1,9 @@
 <?php
 
+
+phpinfo();
+return;
+
 /**
  * ?persistent=1 will use persistent connections
  */

@@ -40,3 +40,34 @@ Use WRK: https://github.com/wg/wrk
 ```
 wrk -t12 -c400 -d30s http://localhost:8400
 ```
+
+This resulted in MYSQL too many connections and actually metrics not working due to not being able to connect to the database.
+
+#### 2. With persistent connection
+
+```
+wrk -t12 -c400 -d30s http://localhost:8400?persistent=true
+```
+
+Still got the too many connections issue while trying to visit the URL while the test was running.
+
+Just to make sure it is not a metrics issue, I ran it with 100 connections.
+
+```
+wrk -t12 -c100 -d60s http://localhost:8400?persistent=true
+```
+
+It nicely showed the metrics in Grafana.
+
+![Metrics](../assets/screenshot-mysql-100.png)
+
+#### 3. With persistent connection and max limit
+
+Now, the most important part is to check if PHP can limit the max connections to a given number. I will set it to 10 in php.ini.
+
+```
+# php.ini
+mysqli.max_persistent = 10
+```
+
+No change. It still ran up to 100 connections.

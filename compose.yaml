@@ -40,19 +40,6 @@ services:
     networks:
       - experiment
 
-  fpm-exporter:
-    image: hipages/php-fpm_exporter
-    container_name: fpm-exporter
-    restart: always
-    environment:
-      PHP_FPM_SCRAPE_URI: "tcp://app:9000/status"
-    ports:
-      - "9253:9253"
-    networks:
-      - experiment
-    depends_on:
-      - app
-
   prometheus:
     image: prom/prometheus
     container_name: prometheus
