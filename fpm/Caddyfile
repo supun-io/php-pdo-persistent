@@ -1,4 +1,15 @@
 :80 {
-    root /var/www/html
-    php_fastcgi localhost:9000
+
+    # https://caddy.community/t/help-configuring-php-fpm-status-for-caddy2/19737/6
+    reverse_proxy /status localhost:9000 {
+        transport fastcgi {
+            env SCRIPT_NAME /status
+			capture_stderr
+		}
+    }
+
+    php_fastcgi localhost:9000 {
+        root /var/www/html
+        try_files index.php
+    }
 }

@@ -11,10 +11,15 @@ RUN apt update && apt install supervisor -y
 # php extensions
 COPY --from=php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions pdo_mysql
+RUN touch /var/www/html/error.log && chown www-data:www-data /var/www/html/error.log
 
 # supervisor conf
 COPY ./supervisor.conf /etc/supervisor/conf.d/supervisord.conf
 # caddyfile
 COPY ./Caddyfile /etc/caddy/Caddyfile
+# fpm config
+COPY ./fpm.conf /usr/local/etc/php-fpm.conf
+
+RUN touch /var/log/php-fpm.log && chown www-data:www-data /var/log/php-fpm.log
 
 CMD ["/usr/bin/supervisord"]

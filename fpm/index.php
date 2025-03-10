@@ -20,7 +20,6 @@ $options = [
 ];
 
 $pdo = new PDO($dsn, $username, $password, $options);
-
 $statement = $pdo->query('SELECT * FROM users');
 $users = $statement->fetchAll();
 

@@ -7,6 +7,7 @@ services:
       - ./fpm:/var/www/html
     ports:
       - 8400:80
+      - 9000:9000
     networks:
       - experiment
 
@@ -21,7 +22,7 @@ services:
     networks:
       - experiment
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
 
   mysqld-exporter:
     image: prom/mysqld-exporter
@@ -58,6 +59,7 @@ services:
     restart: always
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
@@ -75,7 +77,12 @@ services:
     depends_on:
       - prometheus
     volumes:
-      - ./data/grafana:/var/lib/grafana
+      - grafana:/var/lib/grafana
 
 networks:
   experiment:
+
+volumes:
+  grafana:
+  prometheus:
+  mysql:
