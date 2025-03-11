@@ -71,3 +71,9 @@ mysqli.max_persistent = 10
 ```
 
 No change. It still ran up to 100 connections.
+
+Ok, so I learned that there are two extensions to connect to MYSQL: mysqli and PDO. Previously I though PDO uses mysqli under the hood, but it does not look like it.
+
+I could not find a max connection setting in PDO. I will try mysqli setting instead.
+
+Then, I found mysqli extension actually throws an error if the max connections are reached (https://github.com/php/php-src/blob/33c4ca36e43cf03d7aa8eccf4493d84a6a5714eb/ext/mysqli/mysqli_nonapi.c#L226), which is not how a connection pool should work.

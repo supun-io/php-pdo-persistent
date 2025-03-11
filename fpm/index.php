@@ -1,7 +1,6 @@
 <?php
 
-
-phpinfo();
+var_dump(ini_get_all('mysqli'));
 return;
 
 /**
