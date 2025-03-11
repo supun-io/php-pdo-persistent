@@ -6,7 +6,7 @@ Add Prometheus as a data source in Grafana
 Imported this dashboard for MYSQL: https://grafana.com/grafana/dashboards/14057-mysql/
 
 Dashboard:
-![Dashboard](../assets/screenshot-grafana-mysql.png)
+![Dashboard](https://raw.githubusercontent.com/supun-io/php-pdo-persistent/refs/heads/main/assets/screenshot-grafana-mysql.png)
 
 ### Setting up the database
 
@@ -59,7 +59,7 @@ wrk -t12 -c100 -d60s http://localhost:8400?persistent=true
 
 It nicely showed the metrics in Grafana.
 
-![Metrics](../assets/screenshot-mysql-100.png)
+![Metrics](https://raw.githubusercontent.com/supun-io/php-pdo-persistent/refs/heads/main/assets/screenshot-mysql-100.png)
 
 #### 3. With persistent connection and max limit
 
